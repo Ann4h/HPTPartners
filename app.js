@@ -88,21 +88,25 @@ fetch('counties.geojson')
     if (layer.feature && layer.feature.properties) {
         var countyName = layer.feature.properties.County || 'Unknown County';
 
-        // Get the centroid of the polygon
-        var center = layer.getBounds().getCenter();
+        // Get the bounds of the polygon (county)
+        var bounds = layer.getBounds();
+        var center = bounds.getCenter();
 
-        // Check if the centroid is within the polygon
-        if (layer.getBounds().contains(center)) {
-            var label = L.divIcon({
-                className: 'county-label',
-                html: `<b>${countyName}</b>`,
-                iconSize: null, // Automatically size the label
-                iconAnchor: [0, 0] // Position the label correctly
-            });
-            L.marker(center, { icon: label }).addTo(labelsLayer);
-        }
+        // Calculate the width of the county's bounding box in pixels
+        var width = map.latLngToLayerPoint(bounds.getNorthWest()).distanceTo(map.latLngToLayerPoint(bounds.getNorthEast()));
+
+        // Create the label with the width spanning the bounding box
+        var label = L.divIcon({
+            className: 'county-label',
+            html: `<div style="width: ${width}px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${countyName}</div>`,
+            iconSize: [width, 0], // The width of the label is the width of the bounding box
+            iconAnchor: [width / 2, 0] // Center the label
+        });
+
+        L.marker(center, { icon: label }).addTo(labelsLayer);
     }
 }).addTo(map);
+
 
 
         // Populate the dropdown with company names
