@@ -83,17 +83,27 @@ fetch('counties.geojson')
                      <strong>Partners:</strong> ${feature.properties.Entities || 'No data available'}`
                 );
 // Add a plain text label to each county
-                var countyName = feature.properties && feature.properties.County ? feature.properties.County : 'Unknown County';
-                var label = L.divIcon({
-                    className: 'county-label',
-                    html: `<b>${countyName}</b>`,
-                    iconSize: null, // Automatically size the label
-                    iconAnchor: [0, 0] // Position the label correctly
-                });
-                L.marker(layer.getBounds().getCenter(), { icon: label }).addTo(labelsLayer);
-            }
-        }).addTo(map);
-               
+                map.on('layeradd', function(e) {
+    var layer = e.layer;
+    if (layer.feature && layer.feature.properties) {
+        var countyName = layer.feature.properties.County || 'Unknown County';
+
+        // Get the centroid of the polygon
+        var center = layer.getBounds().getCenter();
+
+        // Check if the centroid is within the polygon
+        if (layer.getBounds().contains(center)) {
+            var label = L.divIcon({
+                className: 'county-label',
+                html: `<b>${countyName}</b>`,
+                iconSize: null, // Automatically size the label
+                iconAnchor: [0, 0] // Position the label correctly
+            });
+            L.marker(center, { icon: label }).addTo(labelsLayer);
+        }
+    }
+}).addTo(map);
+
 
         // Populate the dropdown with company names
         populateDropdown();
