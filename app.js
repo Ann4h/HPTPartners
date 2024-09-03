@@ -27,12 +27,12 @@ var labelsLayer = L.layerGroup().addTo(map); // Layer to hold the labels for all
 
 // Function to get color based on the Total value (using shades of blue and white for 0)
 function getColor(d) {
-    return d > 9 ? '#08306b' :
-           d > 6 ? '#2171b5' :
-           d > 3 ? '#4292c6' :
-           d > 1 ? '#6baed6' :
-           d > 0 ? '#deebf7' :
-                   '#ffffff'; // White color for 0 partners
+    return d > 9 ? '#08306b' :  // Dark blue
+           d > 6 ? '#08519c' :  // Medium-dark blue
+           d > 3 ? '#3182bd' :  // Medium blue
+           d > 1 ? '#6baed6' :  // Light blue
+           d > 0 ? '#c6dbef' :  // Very light blue
+                   '#ffffff';   // White for 0
 }
 
 // Function to style each feature
