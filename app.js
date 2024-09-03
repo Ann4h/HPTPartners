@@ -83,30 +83,16 @@ fetch('counties.geojson')
                      <strong>Partners:</strong> ${feature.properties.Entities || 'No data available'}`
                 );
 // Add a plain text label to each county
-                map.on('layeradd', function(e) {
-    var layer = e.layer;
-    if (layer.feature && layer.feature.properties) {
-        var countyName = layer.feature.properties.County || 'Unknown County';
-
-        // Get the bounds of the polygon (county)
-        var bounds = layer.getBounds();
-        var center = bounds.getCenter();
-
-        // Calculate the width of the county's bounding box in pixels
-        var width = map.latLngToLayerPoint(bounds.getNorthWest()).distanceTo(map.latLngToLayerPoint(bounds.getNorthEast()));
-
-        // Create the label with the width spanning the bounding box
-        var label = L.divIcon({
-            className: 'county-label',
-            html: `<div style="width: ${width}px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${countyName}</div>`,
-            iconSize: [width, 0], // The width of the label is the width of the bounding box
-            iconAnchor: [width / 2, 0] // Center the label
-        });
-
-        L.marker(center, { icon: label }).addTo(labelsLayer);
-    }
-}).addTo(map);
-
+ var countyName = feature.properties && feature.properties.County ? feature.properties.County : 'Unknown County';
+                var label = L.divIcon({
+                    className: 'county-label',
+                    html: `<b>${countyName}</b>`,
+                    iconSize: null, // Automatically size the label
+                    iconAnchor: [0, 0] // Position the label correctly
+                });
+                L.marker(layer.getBounds().getCenter(), { icon: label }).addTo(labelsLayer);
+            }
+        }).addTo(map);
 
 
         // Populate the dropdown with company names
