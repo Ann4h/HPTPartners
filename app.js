@@ -142,7 +142,7 @@ legend.onAdd = function (map) {
     div.style.lineHeight = '20px';
     div.style.width = '180px'; // Increase the width of the legend box
 
-    div.innerHTML = '<h4>HPT Supply Number of Partners</h4>';
+    div.innerHTML = '<h4>Number of HPT Partners</h4>';
 
     // Add the "No Partners" label specifically
     div.innerHTML +=
